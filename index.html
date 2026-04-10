@@ -1,908 +1,641 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>퍼스널 브랜드 컨설팅</title>
+  <title>NEXUS — Digital Design Studio</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,300&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
   <style>
     :root {
-      --bg: #080810;
-      --surface: #10101c;
-      --surface-2: #18182a;
-      --border: rgba(201,168,76,0.15);
-      --gold: #c9a84c;
-      --gold-light: #f0d080;
-      --gold-dim: rgba(201,168,76,0.4);
-      --text: #e8e4dc;
-      --text-muted: #7a7488;
-      --text-soft: #b0acbc;
-      --radius: 16px;
-      --radius-sm: 10px;
+      --bg: #0d0d0d;
+      --surface: #161616;
+      --surface-2: #1e1e1e;
+      --border: rgba(255,255,255,0.08);
+      --text: #f0f0f0;
+      --text-2: #888;
+      --text-3: #444;
+      --accent: #3b82f6;
+      --accent-2: #2563eb;
+      --white: #ffffff;
+      --nav-h: 72px;
+      --r: 14px;
+      --r-lg: 20px;
     }
-
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text); overflow-x: hidden; line-height: 1.6; }
 
-    body {
-      font-family: 'DM Sans', sans-serif;
-      background: var(--bg);
-      color: var(--text);
-      min-height: 100vh;
-      overflow-x: hidden;
+    /* ── NAV ── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; height: var(--nav-h);
+      background: rgba(13,13,13,0.88); backdrop-filter: blur(24px);
+      border-bottom: 1px solid var(--border); z-index: 1000;
+      display: flex; align-items: center; padding: 0 40px;
+      transition: border-color .3s;
     }
+    .nav-inner { display: flex; align-items: center; justify-content: space-between; width: 100%; max-width: 1280px; margin: 0 auto; }
+    .logo { font-size: 20px; font-weight: 700; color: var(--white); text-decoration: none; letter-spacing: -.02em; }
+    .logo span { color: var(--accent); }
+    .nav-links { display: flex; align-items: center; gap: 36px; list-style: none; }
+    .nav-links a { font-size: 14px; color: var(--text-2); text-decoration: none; transition: color .2s; }
+    .nav-links a:hover { color: var(--white); }
+    .nav-cta { background: var(--white) !important; color: #0d0d0d !important; padding: 10px 22px; border-radius: 100px; font-weight: 500 !important; }
+    .hamburger { display: none; flex-direction: column; gap: 5px; background: none; border: none; cursor: pointer; padding: 4px; }
+    .hamburger span { display: block; width: 24px; height: 2px; background: var(--white); border-radius: 2px; transition: all .3s; }
 
-    /* Background ambient */
-    body::before {
-      content: '';
-      position: fixed;
-      inset: 0;
-      background:
-        radial-gradient(ellipse 80% 60% at 20% -10%, rgba(120,80,200,0.08) 0%, transparent 60%),
-        radial-gradient(ellipse 60% 50% at 80% 110%, rgba(201,168,76,0.06) 0%, transparent 60%);
-      pointer-events: none;
-      z-index: 0;
+    /* ── MOBILE MENU ── */
+    .mob-menu { display: none; position: fixed; inset: 0; background: var(--bg); z-index: 999; flex-direction: column; align-items: center; justify-content: center; gap: 36px; }
+    .mob-menu.open { display: flex; }
+    .mob-menu a { font-size: 28px; font-weight: 600; color: var(--text); text-decoration: none; }
+    .mob-close { position: absolute; top: 24px; right: 28px; background: none; border: none; color: var(--white); font-size: 28px; cursor: pointer; }
+
+    /* ── UTILS ── */
+    .container { max-width: 1280px; margin: 0 auto; padding: 0 40px; }
+    section { padding: 120px 0; }
+    .label { font-size: 12px; font-weight: 500; letter-spacing: .2em; text-transform: uppercase; color: var(--accent); margin-bottom: 18px; }
+    .h2 { font-size: clamp(2rem, 4vw, 3.2rem); font-weight: 700; line-height: 1.1; letter-spacing: -.04em; color: var(--white); margin-bottom: 20px; }
+    .desc { font-size: 16px; color: var(--text-2); max-width: 480px; line-height: 1.7; }
+    .btn-p { display: inline-flex; align-items: center; gap: 8px; background: var(--accent); color: var(--white); padding: 14px 28px; border-radius: 100px; font-size: 15px; font-weight: 500; text-decoration: none; border: none; cursor: pointer; transition: background .2s, transform .2s; font-family: 'DM Sans', sans-serif; }
+    .btn-p:hover { background: var(--accent-2); transform: translateY(-2px); }
+    .btn-o { display: inline-flex; align-items: center; gap: 8px; background: transparent; color: var(--text); padding: 14px 28px; border-radius: 100px; font-size: 15px; font-weight: 400; text-decoration: none; border: 1px solid var(--border); cursor: pointer; transition: border-color .2s, color .2s; font-family: 'DM Sans', sans-serif; }
+    .btn-o:hover { border-color: rgba(255,255,255,.3); color: var(--white); }
+
+    /* ── REVEAL ── */
+    .r { opacity: 0; transform: translateY(28px); transition: opacity .7s ease, transform .7s ease; }
+    .r.v { opacity: 1; transform: none; }
+    .r.d1 { transition-delay: .1s; } .r.d2 { transition-delay: .2s; } .r.d3 { transition-delay: .3s; }
+
+    /* ── HERO ── */
+    #home { min-height: 100vh; display: flex; align-items: center; padding-top: var(--nav-h); overflow: hidden; }
+    .hero-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; }
+    .hero-h1 { font-size: clamp(3rem, 6vw, 5.2rem); font-weight: 700; line-height: 1.04; letter-spacing: -.05em; color: var(--white); margin-bottom: 24px; }
+    .hero-h1 em { font-style: normal; color: var(--accent); }
+    .hero-sub { font-size: 17px; color: var(--text-2); line-height: 1.75; margin-bottom: 40px; font-weight: 300; max-width: 420px; }
+    .hero-actions { display: flex; gap: 14px; flex-wrap: wrap; }
+
+    /* hero visual */
+    .hero-vis { position: relative; height: 480px; }
+    .hcard { position: absolute; background: var(--surface); border: 1px solid var(--border); border-radius: var(--r-lg); overflow: hidden; }
+    .hcard-main { inset: 0 0 100px 0; background: linear-gradient(135deg,#0f1e3a,#0a2a5e,#0d1f3c); display: flex; align-items: center; justify-content: center; }
+    .hcard-a { bottom: 0; left: 0; width: 210px; padding: 20px; }
+    .hcard-b { bottom: 50px; right: -10px; width: 170px; padding: 20px; }
+    .metric { font-size: 30px; font-weight: 700; color: var(--white); line-height: 1; }
+    .metric-lbl { font-size: 12px; color: var(--text-2); margin-top: 5px; }
+    .dot { width: 8px; height: 8px; border-radius: 50%; background: #22c55e; display: inline-block; margin-right: 6px; animation: blink 2s infinite; }
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:.3} }
+
+    /* ── TICKER ── */
+    .ticker { background: var(--accent); padding: 13px 0; overflow: hidden; white-space: nowrap; }
+    .ticker-track { display: inline-flex; animation: tick 28s linear infinite; }
+    .ticker-item { font-size: 14px; font-weight: 500; color: #fff; padding: 0 28px; display: inline-flex; align-items: center; gap: 28px; }
+    .ticker-item::after { content: '✦'; opacity: .55; }
+    @keyframes tick { from{transform:translateX(0)} to{transform:translateX(-50%)} }
+
+    /* ── WORKS ── */
+    #works { background: var(--bg); }
+    .works-hd { display: flex; align-items: flex-end; justify-content: space-between; margin-bottom: 56px; }
+    .works-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+    .wcard { position: relative; border-radius: var(--r-lg); overflow: hidden; background: var(--surface); cursor: pointer; }
+    .wcard:first-child { grid-column: span 2; }
+    .wthumb { width: 100%; display: block; object-fit: cover; transition: transform .6s cubic-bezier(.4,0,.2,1); }
+    .wcard:first-child .wthumb { aspect-ratio: 16/7; }
+    .wcard:not(:first-child) .wthumb { aspect-ratio: 4/3; }
+    .wcard:hover .wthumb { transform: scale(1.04); }
+    .woverlay { position: absolute; bottom: 0; left: 0; right: 0; padding: 48px 28px 28px; background: linear-gradient(transparent,rgba(0,0,0,.88)); }
+    .wtags { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 10px; }
+    .wtag { font-size: 11px; font-weight: 500; letter-spacing: .1em; text-transform: uppercase; background: rgba(255,255,255,.12); color: rgba(255,255,255,.8); padding: 4px 10px; border-radius: 100px; backdrop-filter: blur(4px); }
+    .wtitle { font-size: 21px; font-weight: 600; color: var(--white); letter-spacing: -.02em; }
+
+    /* ── PHYSICS ── */
+    #physics { padding: 72px 0; background: var(--surface); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); overflow: hidden; }
+    #physics-lbl { text-align: center; font-size: 12px; color: var(--text-3); margin-bottom: 14px; letter-spacing: .2em; text-transform: uppercase; }
+    #mc { display: block; width: 100%; height: 300px; }
+
+    /* ── SERVICES ── */
+    #services { background: var(--bg); }
+    .srv-grid { display: grid; grid-template-columns: 1fr 1.5fr; gap: 96px; align-items: start; }
+    .srv-sticky { position: sticky; top: 100px; }
+    .srv-list { list-style: none; border-top: 1px solid var(--border); }
+    .si { border-bottom: 1px solid var(--border); overflow: hidden; }
+    .si-hd { display: flex; align-items: center; padding: 22px 0; cursor: pointer; transition: color .2s; gap: 0; }
+    .si-hd:hover { color: var(--accent); }
+    .si-num { font-size: 12px; color: var(--text-3); width: 32px; flex-shrink: 0; }
+    .si-name { flex: 1; font-size: 17px; font-weight: 500; }
+    .si-arr { width: 26px; height: 26px; border: 1px solid var(--border); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 13px; transition: background .2s, border-color .2s, transform .3s; flex-shrink: 0; }
+    .si.open .si-arr { background: var(--accent); border-color: var(--accent); transform: rotate(45deg); }
+    .si-body { max-height: 0; overflow: hidden; transition: max-height .4s cubic-bezier(.4,0,.2,1); }
+    .si.open .si-body { max-height: 100px; }
+    .si-desc { font-size: 14px; color: var(--text-2); line-height: 1.7; padding: 0 0 20px 32px; }
+
+    /* ── STATS ── */
+    #stats { background: var(--surface); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); padding: 80px 0; }
+    .stats-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 40px; text-align: center; }
+    .stat-n { font-size: clamp(2.5rem,5vw,4rem); font-weight: 700; color: var(--white); letter-spacing: -.05em; line-height: 1; margin-bottom: 10px; }
+    .stat-n em { font-style: normal; color: var(--accent); }
+    .stat-l { font-size: 14px; color: var(--text-2); }
+
+    /* ── TESTIMONIALS ── */
+    #testimonials { background: var(--bg); }
+    .swiper { overflow: visible; }
+    .swiper-wrapper { padding-bottom: 52px; }
+    .tcard { background: var(--surface); border: 1px solid var(--border); border-radius: var(--r-lg); padding: 36px; height: auto; }
+    .tquote { font-size: 17px; font-weight: 300; font-style: italic; line-height: 1.75; color: var(--text); margin-bottom: 28px; }
+    .tauthor { display: flex; align-items: center; gap: 14px; }
+    .tavatar { width: 44px; height: 44px; border-radius: 50%; overflow: hidden; flex-shrink: 0; background: var(--surface-2); }
+    .tavatar img { width: 100%; height: 100%; object-fit: cover; }
+    .tname { font-size: 15px; font-weight: 600; color: var(--white); }
+    .trole { font-size: 13px; color: var(--text-2); margin-top: 2px; }
+    .swiper-scrollbar { background: var(--surface-2) !important; height: 2px !important; bottom: 0 !important; }
+    .swiper-scrollbar-drag { background: var(--accent) !important; }
+
+    /* ── CONTACT ── */
+    #contact { background: var(--surface); }
+    .ct-grid { display: grid; grid-template-columns: 1fr 1.4fr; gap: 80px; align-items: start; }
+    .ct-info h2 { font-size: clamp(2rem,4vw,3rem); font-weight: 700; letter-spacing: -.04em; color: var(--white); line-height: 1.1; margin-bottom: 18px; }
+    .ct-info p { font-size: 15px; color: var(--text-2); line-height: 1.7; margin-bottom: 36px; }
+    .ct-details { display: flex; flex-direction: column; gap: 14px; }
+    .ct-item { display: flex; align-items: center; gap: 12px; font-size: 14px; color: var(--text-2); }
+    .ct-icon { width: 36px; height: 36px; background: var(--surface-2); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 16px; flex-shrink: 0; }
+    .fg { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    .f { display: flex; flex-direction: column; gap: 7px; }
+    .f.full { grid-column: span 2; }
+    .f label { font-size: 11px; font-weight: 500; letter-spacing: .15em; text-transform: uppercase; color: var(--text-2); }
+    .f input, .f textarea, .f select { background: var(--surface-2); border: 1px solid var(--border); border-radius: var(--r); color: var(--text); font-family: 'DM Sans',sans-serif; font-size: 15px; padding: 13px 16px; outline: none; transition: border-color .2s; width: 100%; }
+    .f input:focus,.f textarea:focus,.f select:focus { border-color: var(--accent); }
+    .f input::placeholder,.f textarea::placeholder { color: var(--text-3); }
+    .f textarea { resize: vertical; min-height: 110px; }
+    .f select { appearance: none; cursor: pointer; }
+    .f select option { background: #1e1e1e; }
+    .cbox-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    .cbox { display: flex; align-items: center; gap: 10px; cursor: pointer; font-size: 14px; color: var(--text-2); }
+    .cbox input { width: 16px; height: 16px; padding: 0; flex-shrink: 0; accent-color: var(--accent); }
+    .f-submit { grid-column: span 2; margin-top: 6px; }
+    .f-submit .btn-p { width: 100%; justify-content: center; padding: 15px; }
+    .success-box { display: none; padding: 32px; background: rgba(34,197,94,.08); border: 1px solid rgba(34,197,94,.2); border-radius: var(--r-lg); text-align: center; }
+    .success-box .s-ico { font-size: 36px; margin-bottom: 12px; }
+    .success-box .s-t { font-size: 18px; font-weight: 600; color: var(--white); margin-bottom: 8px; }
+    .success-box .s-s { font-size: 14px; color: var(--text-2); }
+
+    /* ── FOOTER ── */
+    footer { background: var(--bg); border-top: 1px solid var(--border); padding: 80px 0 36px; }
+    .ft-top { display: grid; grid-template-columns: 1.4fr 1fr 1fr 1fr; gap: 56px; margin-bottom: 56px; }
+    .ft-brand .logo { display: inline-block; margin-bottom: 16px; }
+    .ft-brand p { font-size: 14px; color: var(--text-2); line-height: 1.7; max-width: 280px; margin-bottom: 24px; }
+    .ft-social { display: flex; gap: 10px; }
+    .soc { width: 38px; height: 38px; border: 1px solid var(--border); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 14px; color: var(--text-2); text-decoration: none; transition: border-color .2s, color .2s; }
+    .soc:hover { border-color: rgba(255,255,255,.3); color: var(--white); }
+    .ft-col h4 { font-size: 13px; font-weight: 600; color: var(--white); letter-spacing: .08em; text-transform: uppercase; margin-bottom: 20px; }
+    .ft-col ul { list-style: none; display: flex; flex-direction: column; gap: 12px; }
+    .ft-col a { font-size: 14px; color: var(--text-2); text-decoration: none; transition: color .2s; }
+    .ft-col a:hover { color: var(--white); }
+    .ft-bot { border-top: 1px solid var(--border); padding-top: 28px; display: flex; align-items: center; justify-content: space-between; }
+    .ft-bot p { font-size: 13px; color: var(--text-3); }
+
+    /* ── RESPONSIVE ── */
+    @media(max-width:1024px){
+      .hero-grid,.srv-grid,.ct-grid { grid-template-columns:1fr; gap:60px; }
+      .hero-vis,.srv-sticky { display: none; }
+      .srv-sticky { display: none; }
+      .ft-top { grid-template-columns: 1fr 1fr; }
+      .stats-grid { grid-template-columns: 1fr 1fr; }
     }
-
-    .container { max-width: 780px; margin: 0 auto; padding: 0 24px; position: relative; z-index: 1; }
-
-    /* Header */
-    header {
-      padding: 72px 0 56px;
-      text-align: center;
-    }
-
-    .eyebrow {
-      font-family: 'DM Sans', sans-serif;
-      font-size: 11px;
-      font-weight: 500;
-      letter-spacing: 0.25em;
-      text-transform: uppercase;
-      color: var(--gold);
-      margin-bottom: 20px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 12px;
-    }
-
-    .eyebrow::before, .eyebrow::after {
-      content: '';
-      display: block;
-      width: 40px;
-      height: 1px;
-      background: var(--gold-dim);
-    }
-
-    h1 {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: clamp(2.8rem, 7vw, 4.5rem);
-      font-weight: 300;
-      line-height: 1.1;
-      color: var(--text);
-      margin-bottom: 20px;
-    }
-
-    h1 em {
-      font-style: italic;
-      color: var(--gold-light);
-    }
-
-    .subtitle {
-      font-size: 15px;
-      font-weight: 300;
-      color: var(--text-soft);
-      line-height: 1.7;
-      max-width: 480px;
-      margin: 0 auto;
-    }
-
-    /* Form card */
-    .form-card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 48px;
-      margin-bottom: 32px;
-    }
-
-    .form-grid {
-      display: grid;
-      gap: 28px;
-    }
-
-    .field { display: flex; flex-direction: column; gap: 10px; }
-
-    label {
-      font-size: 11px;
-      font-weight: 500;
-      letter-spacing: 0.18em;
-      text-transform: uppercase;
-      color: var(--gold);
-    }
-
-    input, select {
-      background: var(--surface-2);
-      border: 1px solid rgba(255,255,255,0.08);
-      border-radius: var(--radius-sm);
-      color: var(--text);
-      font-family: 'DM Sans', sans-serif;
-      font-size: 15px;
-      font-weight: 300;
-      padding: 14px 18px;
-      outline: none;
-      transition: border-color 0.2s, box-shadow 0.2s;
-      width: 100%;
-      appearance: none;
-    }
-
-    input[type="date"]::-webkit-calendar-picker-indicator { filter: invert(0.7); cursor: pointer; }
-
-    input:focus, select:focus {
-      border-color: var(--gold-dim);
-      box-shadow: 0 0 0 3px rgba(201,168,76,0.08);
-    }
-
-    input::placeholder { color: var(--text-muted); }
-
-    .select-wrap { position: relative; }
-
-    .select-wrap::after {
-      content: '▾';
-      position: absolute;
-      right: 18px;
-      top: 50%;
-      transform: translateY(-50%);
-      color: var(--gold);
-      pointer-events: none;
-      font-size: 12px;
-    }
-
-    select { cursor: pointer; }
-    select option { background: #1e1e30; }
-
-    .cta {
-      background: linear-gradient(135deg, var(--gold) 0%, var(--gold-light) 100%);
-      border: none;
-      border-radius: var(--radius-sm);
-      color: #0a0808;
-      cursor: pointer;
-      font-family: 'DM Sans', sans-serif;
-      font-size: 13px;
-      font-weight: 500;
-      letter-spacing: 0.15em;
-      padding: 16px 32px;
-      text-transform: uppercase;
-      transition: opacity 0.2s, transform 0.2s;
-      width: 100%;
-      margin-top: 8px;
-    }
-
-    .cta:hover { opacity: 0.9; transform: translateY(-1px); }
-    .cta:active { transform: translateY(0); }
-
-    /* Results */
-    #results {
-      display: none;
-      animation: fadeUp 0.6s ease forwards;
-    }
-
-    #results.visible { display: block; }
-
-    @keyframes fadeUp {
-      from { opacity: 0; transform: translateY(24px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    .result-header {
-      text-align: center;
-      padding: 48px 0 40px;
-      border-bottom: 1px solid var(--border);
-      margin-bottom: 40px;
-    }
-
-    .brand-name {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: clamp(1.8rem, 5vw, 2.8rem);
-      font-weight: 300;
-      color: var(--text);
-      margin-bottom: 8px;
-    }
-
-    .brand-tagline {
-      font-size: 14px;
-      color: var(--gold);
-      letter-spacing: 0.1em;
-      font-style: italic;
-    }
-
-    /* Sections */
-    .section { margin-bottom: 32px; }
-
-    .section-title {
-      font-size: 11px;
-      font-weight: 500;
-      letter-spacing: 0.22em;
-      text-transform: uppercase;
-      color: var(--text-muted);
-      margin-bottom: 16px;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-
-    .section-title::after {
-      content: '';
-      flex: 1;
-      height: 1px;
-      background: var(--border);
-    }
-
-    /* Score bar */
-    .archetype-card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 32px;
-    }
-
-    .archetype-name {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 2rem;
-      font-weight: 400;
-      color: var(--gold-light);
-      margin-bottom: 6px;
-    }
-
-    .archetype-sub {
-      font-size: 13px;
-      color: var(--text-soft);
-      margin-bottom: 20px;
-      line-height: 1.6;
-    }
-
-    .trait-list {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      margin-top: 16px;
-    }
-
-    .trait {
-      background: rgba(201,168,76,0.08);
-      border: 1px solid rgba(201,168,76,0.2);
-      border-radius: 20px;
-      color: var(--gold-light);
-      font-size: 12px;
-      font-weight: 400;
-      letter-spacing: 0.05em;
-      padding: 5px 14px;
-    }
-
-    /* Color palette */
-    .palette-row {
-      display: flex;
-      gap: 12px;
-      flex-wrap: wrap;
-    }
-
-    .swatch-item { text-align: center; }
-
-    .swatch {
-      width: 56px;
-      height: 56px;
-      border-radius: 12px;
-      margin-bottom: 8px;
-      border: 1px solid rgba(255,255,255,0.06);
-    }
-
-    .swatch-name { font-size: 10px; color: var(--text-muted); letter-spacing: 0.05em; }
-
-    /* Two-col grid */
-    .two-col {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 16px;
-    }
-
-    .info-card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 24px;
-    }
-
-    .info-card-title {
-      font-size: 11px;
-      letter-spacing: 0.18em;
-      text-transform: uppercase;
-      color: var(--gold);
-      margin-bottom: 12px;
-      font-weight: 500;
-    }
-
-    .info-card p {
-      font-size: 14px;
-      color: var(--text-soft);
-      line-height: 1.7;
-      font-weight: 300;
-    }
-
-    /* Style direction */
-    .style-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 12px;
-    }
-
-    .style-block {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: var(--radius-sm);
-      padding: 20px 16px;
-      text-align: center;
-    }
-
-    .style-icon { font-size: 24px; margin-bottom: 10px; }
-
-    .style-label {
-      font-size: 12px;
-      font-weight: 500;
-      color: var(--text);
-      margin-bottom: 4px;
-    }
-
-    .style-desc { font-size: 11px; color: var(--text-muted); line-height: 1.5; }
-
-    /* Brand slogan */
-    .slogan-card {
-      background: linear-gradient(135deg, rgba(201,168,76,0.08) 0%, rgba(120,80,200,0.05) 100%);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 40px;
-      text-align: center;
-    }
-
-    .slogan-text {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: clamp(1.4rem, 4vw, 2rem);
-      font-weight: 300;
-      font-style: italic;
-      color: var(--text);
-      line-height: 1.4;
-      margin-bottom: 12px;
-    }
-
-    .slogan-note { font-size: 13px; color: var(--text-muted); }
-
-    /* Strength bars */
-    .strength-row {
-      display: flex;
-      flex-direction: column;
-      gap: 14px;
-    }
-
-    .strength-item { }
-
-    .strength-meta {
-      display: flex;
-      justify-content: space-between;
-      margin-bottom: 6px;
-    }
-
-    .strength-label { font-size: 13px; color: var(--text-soft); }
-    .strength-val { font-size: 12px; color: var(--gold); }
-
-    .bar-bg {
-      height: 4px;
-      background: rgba(255,255,255,0.05);
-      border-radius: 2px;
-      overflow: hidden;
-    }
-
-    .bar-fill {
-      height: 100%;
-      background: linear-gradient(90deg, var(--gold), var(--gold-light));
-      border-radius: 2px;
-      transition: width 1s cubic-bezier(0.4, 0, 0.2, 1);
-      width: 0;
-    }
-
-    /* Reset */
-    .reset-btn {
-      background: transparent;
-      border: 1px solid var(--border);
-      border-radius: var(--radius-sm);
-      color: var(--text-muted);
-      cursor: pointer;
-      font-family: 'DM Sans', sans-serif;
-      font-size: 13px;
-      letter-spacing: 0.1em;
-      padding: 12px 28px;
-      text-transform: uppercase;
-      transition: border-color 0.2s, color 0.2s;
-      width: 100%;
-      margin-top: 16px;
-      margin-bottom: 80px;
-    }
-
-    .reset-btn:hover { border-color: var(--gold-dim); color: var(--text); }
-
-    @media (max-width: 600px) {
-      .form-card { padding: 28px 20px; }
-      .two-col { grid-template-columns: 1fr; }
-      .style-grid { grid-template-columns: 1fr 1fr; }
-      .archetype-card { padding: 24px 20px; }
+    @media(max-width:768px){
+      nav { padding: 0 20px; }
+      .container { padding: 0 20px; }
+      section { padding: 80px 0; }
+      .nav-links { display: none; }
+      .hamburger { display: flex; }
+      .works-hd { flex-direction: column; align-items: flex-start; gap: 20px; }
+      .works-grid { grid-template-columns: 1fr; }
+      .wcard:first-child { grid-column: span 1; }
+      .fg { grid-template-columns: 1fr; }
+      .f.full,.f-submit { grid-column: span 1; }
+      .ft-top { grid-template-columns: 1fr; gap: 40px; }
+      .ft-bot { flex-direction: column; gap: 10px; text-align: center; }
+      .stats-grid { grid-template-columns: 1fr 1fr; gap: 28px; }
     }
   </style>
 </head>
 <body>
 
-<div class="container">
-  <header>
-    <p class="eyebrow">Personal Brand Consulting</p>
-    <h1>당신만의 <em>브랜드</em>를<br>발견하세요</h1>
-    <p class="subtitle">생년월일, MBTI, 얼굴형을 분석해<br>당신에게 딱 맞는 퍼스널 브랜드 전략을 제안합니다.</p>
-  </header>
+<!-- Mobile menu -->
+<div class="mob-menu" id="mob">
+  <button class="mob-close" id="mob-close">✕</button>
+  <a href="#home">Home</a>
+  <a href="#works">Works</a>
+  <a href="#services">Services</a>
+  <a href="#testimonials">Reviews</a>
+  <a href="#contact" class="btn-p">Let's Chat →</a>
+</div>
 
-  <!-- Form -->
-  <div class="form-card" id="formSection">
-    <div class="form-grid">
-      <div class="field">
-        <label for="dob">생년월일</label>
-        <input type="date" id="dob" max="2010-12-31" min="1940-01-01">
-      </div>
+<!-- Nav -->
+<nav id="nav">
+  <div class="nav-inner">
+    <a href="#home" class="logo">NEXUS<span>.</span></a>
+    <ul class="nav-links">
+      <li><a href="#works">Works</a></li>
+      <li><a href="#services">Services</a></li>
+      <li><a href="#testimonials">Reviews</a></li>
+      <li><a href="#contact">About</a></li>
+      <li><a href="#contact" class="nav-cta">Let's chat →</a></li>
+    </ul>
+    <button class="hamburger" id="ham"><span></span><span></span><span></span></button>
+  </div>
+</nav>
 
-      <div class="field">
-        <label for="mbti">MBTI 유형</label>
-        <div class="select-wrap">
-          <select id="mbti">
-            <option value="">선택해주세요</option>
-            <optgroup label="분석가 (Analysts)">
-              <option value="INTJ">INTJ — 전략가</option>
-              <option value="INTP">INTP — 논리술사</option>
-              <option value="ENTJ">ENTJ — 통솔자</option>
-              <option value="ENTP">ENTP — 변론가</option>
-            </optgroup>
-            <optgroup label="외교관 (Diplomats)">
-              <option value="INFJ">INFJ — 옹호자</option>
-              <option value="INFP">INFP — 중재자</option>
-              <option value="ENFJ">ENFJ — 선도자</option>
-              <option value="ENFP">ENFP — 활동가</option>
-            </optgroup>
-            <optgroup label="관리자 (Sentinels)">
-              <option value="ISTJ">ISTJ — 현실주의자</option>
-              <option value="ISFJ">ISFJ — 수호자</option>
-              <option value="ESTJ">ESTJ — 경영자</option>
-              <option value="ESFJ">ESFJ — 집정관</option>
-            </optgroup>
-            <optgroup label="탐험가 (Explorers)">
-              <option value="ISTP">ISTP — 장인</option>
-              <option value="ISFP">ISFP — 모험가</option>
-              <option value="ESTP">ESTP — 사업가</option>
-              <option value="ESFP">ESFP — 연예인</option>
-            </optgroup>
-          </select>
+<!-- Hero -->
+<section id="home">
+  <div class="container">
+    <div class="hero-grid">
+      <div>
+        <p class="label r">Design &amp; Development Studio</p>
+        <h1 class="hero-h1 r d1">
+          Craft <em>digital</em><br>
+          experiences<br>that scale
+        </h1>
+        <p class="hero-sub r d2">
+          Helping B2B tech companies build compelling brands and high-performance digital products — from early-stage to enterprise.
+        </p>
+        <div class="hero-actions r d3">
+          <a href="#works" class="btn-p">View Our Work →</a>
+          <a href="#contact" class="btn-o">Start a Project</a>
         </div>
       </div>
-
-      <div class="field">
-        <label for="face">얼굴형</label>
-        <div class="select-wrap">
-          <select id="face">
-            <option value="">선택해주세요</option>
-            <option value="oval">타원형 — 이마와 턱이 균형잡힌 형태</option>
-            <option value="round">둥근형 — 볼이 도톰하고 부드러운 형태</option>
-            <option value="square">각진형 — 턱선이 강하고 이마가 넓은 형태</option>
-            <option value="heart">하트형 — 이마가 넓고 턱이 좁은 형태</option>
-            <option value="long">긴형 — 얼굴 길이가 너비보다 긴 형태</option>
-            <option value="diamond">다이아몬드형 — 광대뼈가 가장 넓은 형태</option>
-          </select>
+      <div class="hero-vis">
+        <div class="hcard hcard-main">
+          <svg width="300" height="180" viewBox="0 0 300 180" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect x="24" y="24" width="88" height="88" rx="18" fill="rgba(59,130,246,0.15)" stroke="rgba(59,130,246,0.35)" stroke-width="1"/>
+            <circle cx="68" cy="68" r="26" fill="rgba(59,130,246,0.25)"/>
+            <path d="M58 68L66 76L80 56" stroke="#60a5fa" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+            <rect x="128" y="32" width="148" height="12" rx="6" fill="rgba(255,255,255,0.07)"/>
+            <rect x="128" y="54" width="112" height="12" rx="6" fill="rgba(255,255,255,0.05)"/>
+            <rect x="128" y="76" width="130" height="12" rx="6" fill="rgba(255,255,255,0.04)"/>
+            <rect x="24" y="130" width="252" height="8" rx="4" fill="rgba(255,255,255,0.04)"/>
+            <rect x="24" y="148" width="200" height="8" rx="4" fill="rgba(255,255,255,0.03)"/>
+            <circle cx="260" cy="40" r="16" fill="rgba(59,130,246,0.15)" stroke="rgba(59,130,246,0.3)" stroke-width="1"/>
+            <path d="M255 40h10M260 35v10" stroke="#60a5fa" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <div class="hcard hcard-a">
+          <div style="font-size:11px;color:#444;margin-bottom:8px;letter-spacing:.1em;">PROJECTS DELIVERED</div>
+          <div class="metric">120<em style="color:var(--accent);font-style:normal">+</em></div>
+          <div class="metric-lbl">Across 18 countries</div>
+        </div>
+        <div class="hcard hcard-b">
+          <div style="font-size:11px;color:#444;margin-bottom:8px;"><span class="dot"></span>Active now</div>
+          <div class="metric" style="font-size:22px;">⭐ 4.9</div>
+          <div class="metric-lbl">Client rating</div>
         </div>
       </div>
-
-      <button class="cta" onclick="analyze()">브랜드 분석 시작하기</button>
     </div>
   </div>
+</section>
 
-  <!-- Results -->
-  <div id="results">
-    <div class="result-header">
-      <div class="brand-name" id="res-name">—</div>
-      <div class="brand-tagline" id="res-tagline">—</div>
-    </div>
-
-    <div class="section">
-      <div class="section-title">브랜드 아키타입</div>
-      <div class="archetype-card">
-        <div class="archetype-name" id="res-archetype">—</div>
-        <div class="archetype-sub" id="res-archdesc">—</div>
-        <div class="trait-list" id="res-traits"></div>
-      </div>
-    </div>
-
-    <div class="section">
-      <div class="section-title">퍼스널 컬러 팔레트</div>
-      <div class="palette-row" id="res-palette"></div>
-    </div>
-
-    <div class="section">
-      <div class="section-title">스타일 방향</div>
-      <div class="style-grid" id="res-style"></div>
-    </div>
-
-    <div class="section">
-      <div class="section-title">핵심 역량 지수</div>
-      <div class="info-card strength-row" id="res-strengths"></div>
-    </div>
-
-    <div class="section">
-      <div class="two-col">
-        <div class="info-card">
-          <div class="info-card-title">커뮤니케이션 스타일</div>
-          <p id="res-comm">—</p>
-        </div>
-        <div class="info-card">
-          <div class="info-card-title">추천 커리어 방향</div>
-          <p id="res-career">—</p>
-        </div>
-      </div>
-    </div>
-
-    <div class="section">
-      <div class="two-col">
-        <div class="info-card">
-          <div class="info-card-title">얼굴형 스타일링 팁</div>
-          <p id="res-face">—</p>
-        </div>
-        <div class="info-card">
-          <div class="info-card-title">별자리 에너지</div>
-          <p id="res-zodiac">—</p>
-        </div>
-      </div>
-    </div>
-
-    <div class="section">
-      <div class="section-title">퍼스널 브랜드 슬로건</div>
-      <div class="slogan-card">
-        <div class="slogan-text" id="res-slogan">—</div>
-        <div class="slogan-note" id="res-slogan-note">—</div>
-      </div>
-    </div>
-
-    <button class="reset-btn" onclick="reset()">다시 분석하기</button>
+<!-- Ticker -->
+<div class="ticker" aria-hidden="true">
+  <div class="ticker-track">
+    <span class="ticker-item">Brand Strategy</span><span class="ticker-item">Web Design</span><span class="ticker-item">UI/UX Design</span><span class="ticker-item">Motion Design</span><span class="ticker-item">SEO Optimization</span><span class="ticker-item">Development</span><span class="ticker-item">Content Design</span><span class="ticker-item">Landing Pages</span><span class="ticker-item">Brand Strategy</span><span class="ticker-item">Web Design</span><span class="ticker-item">UI/UX Design</span><span class="ticker-item">Motion Design</span><span class="ticker-item">SEO Optimization</span><span class="ticker-item">Development</span><span class="ticker-item">Content Design</span><span class="ticker-item">Landing Pages</span>
   </div>
 </div>
 
-<script>
-const MBTI_DATA = {
-  INTJ: {
-    archetype: '비전 전략가', archdesc: '긴 안목으로 세상을 설계하는 독립적 사고의 소유자. 복잡한 시스템을 꿰뚫어보고 미래를 구조화하는 능력이 탁월합니다.',
-    traits: ['시스템적 사고', '독립성', '완벽주의', '장기적 비전', '지적 깊이'],
-    palette: [['#1a1a2e','심야 인디고'],['#2d2d5e','딥 바이올렛'],['#c9a84c','골드'],['#e8e4dc','아이보리'],['#4a4060','머브 그레이']],
-    strengths: [['전략적 사고', 96], ['독립성', 90], ['지적 추구', 94], ['리더십', 78], ['공감 능력', 52]],
-    comm: '간결하고 논리적. 불필요한 감정 표현 없이 핵심만 전달합니다. 깊이 있는 1:1 대화를 선호하며 소규모 미팅에서 진가를 발휘합니다.',
-    career: '전략 컨설턴트, CTO, 연구개발 리더, 건축가, 데이터 사이언티스트, 투자분석가',
-    style: [['🖤','모노크롬 미니멀','흑백 대비의 정제된 룩'],['⌚','기능적 럭셔리','퀄리티 소재의 심플한 디자인'],['📐','구조적 실루엣','각도와 라인이 살아있는 핏']],
-    slogan: '"나는 미래를 설계한다"', sloganNote: '전략과 통찰로 세상을 변화시키는 당신의 본질',
-  },
-  INTP: {
-    archetype: '지식 혁신가', archdesc: '기존 질서에 의문을 던지고 새로운 이론을 구축하는 지적 모험가. 복잡한 개념을 즐기고 진실을 추구합니다.',
-    traits: ['논리적 분석', '창의적 사고', '지적 호기심', '개방성', '개념 설계'],
-    palette: [['#0d1b2a','딥 오션'],['#1b4332','포레스트'],['#a8c5da','스틸 블루'],['#d4e6d9','민트 화이트'],['#c9a84c','앰버']],
-    strengths: [['분석력', 97], ['창의성', 88], ['지식 탐구', 95], ['유연성', 80], ['실행력', 55]],
-    comm: '개념 중심의 대화를 즐기며 디테일에 깊이 빠져들곤 합니다. 직접적이고 솔직한 편이며 지적 토론을 통해 관계를 형성합니다.',
-    career: '소프트웨어 아키텍트, 학자, 철학자, 물리학자, AI 연구원, 독립 컨설턴트',
-    style: [['🎓','아카데믹 캐주얼','지성미가 묻어나는 편안한 스타일'],['🔬','미래지향적','테크적 감각의 미니멀리즘'],['📚','레이어드 스타일','깊이를 표현하는 텍스처 믹스']],
-    slogan: '"생각이 세상을 바꾼다"', sloganNote: '아이디어와 탐구로 진실에 닿는 당신의 여정',
-  },
-  ENTJ: {
-    archetype: '카리스마 리더', archdesc: '목표를 향해 사람과 자원을 결집시키는 타고난 지휘관. 과감한 결단력과 강한 실행력으로 변화를 이끕니다.',
-    traits: ['결단력', '리더십', '전략적 실행', '카리스마', '목표 지향성'],
-    palette: [['#1a0505','다크 크림슨'],['#8b1a1a','딥 레드'],['#c9a84c','골드'],['#f5f0e8','크림'],['#2c2c3a','차콜']],
-    strengths: [['리더십', 97], ['결단력', 94], ['전략 실행', 92], ['카리스마', 90], ['섬세함', 50]],
-    comm: '직접적이고 자신감 있는 어조. 큰 그림을 제시하며 사람들을 비전으로 이끕니다. 프레젠테이션과 공개 연설에서 빛납니다.',
-    career: 'CEO, 사업가, 정치가, 투자자, 전략 컨설턴트, 군사 지휘관',
-    style: [['👔','파워 드레싱','권위와 자신감을 표현하는 테일러드'],['🔴','시그니처 컬러','기억에 남는 포인트 색상 활용'],['💎','프레스티지 액세서리','브랜드와 위상을 드러내는 디테일']],
-    slogan: '"나는 승리를 만든다"', sloganNote: '도전과 정복으로 세상에 족적을 남기는 당신',
-  },
-  ENTP: {
-    archetype: '창의적 혁신가', archdesc: '아이디어와 아이디어를 연결해 새로운 가능성을 여는 기발한 발명가. 논쟁을 즐기고 현상에 도전합니다.',
-    traits: ['창의성', '논쟁 능력', '다재다능', '혁신 추구', '지적 유연성'],
-    palette: [['#ff6b35','코랄 오렌지'],['#1a1a2e','딥 네이비'],['#00b4d8','일렉트릭 블루'],['#f8f9fa','퓨어 화이트'],['#6c757d','미드 그레이']],
-    strengths: [['창의성', 96], ['적응력', 90], ['소통력', 88], ['혁신성', 94], ['지속성', 58]],
-    comm: '에너지 넘치고 유머러스. 브레인스토밍을 즐기고 반대 의견도 활발히 환영합니다. 대화에서 새로운 가능성을 즉흥적으로 발견합니다.',
-    career: '스타트업 창업가, 마케터, 변호사, 크리에이티브 디렉터, 미디어 기획자',
-    style: [['🎨','믹스매치 마스터','예상 밖의 조합으로 개성 표현'],['⚡','트렌드 리드','남들보다 한 발 앞선 스타일'],['😄','플레이풀 포인트','유쾌함을 담은 특별한 아이템']],
-    slogan: '"나는 가능성을 연다"', sloganNote: '고정관념을 깨고 새로운 길을 만드는 당신',
-  },
-  INFJ: {
-    archetype: '영감의 현인', archdesc: '깊은 통찰과 진정성으로 세상에 의미를 심는 이상주의적 가이드. 조용하지만 강한 영향력으로 사람들을 감화합니다.',
-    traits: ['깊은 통찰', '진정성', '공감 능력', '이상주의', '창의적 비전'],
-    palette: [['#2e1760','딥 퍼플'],['#7c3aed','비올렛'],['#c084fc','라벤더'],['#f0e6ff','페일 라벤더'],['#d4a853','앰버 골드']],
-    strengths: [['통찰력', 96], ['공감', 94], ['창의성', 88], ['진정성', 96], ['실용성', 60]],
-    comm: '신중하고 의미 있는 말만 합니다. 깊은 1:1 대화를 선호하며 상대의 말 속 감정을 정확히 읽어냅니다. 글쓰기로 진심을 전달합니다.',
-    career: '상담사, 작가, 심리학자, 사회운동가, 교사, 예술감독, 치료사',
-    style: [['🌙','신비로운 미학','깊이와 분위기가 느껴지는 스타일'],['💜','한 가지 시그니처','기억에 남는 나만의 컬러/아이템'],['✍️','아트 피스','의미 있는 디테일이 담긴 의상']],
-    slogan: '"나는 세상을 변화시킨다, 조용히"', sloganNote: '깊은 영감과 진정성으로 마음에 닿는 당신',
-  },
-  INFP: {
-    archetype: '진정성의 예술가', archdesc: '내면의 가치와 이상을 지키며 세상에 아름다움을 더하는 몽상적 창조자. 진심 어린 표현으로 사람들의 마음을 움직입니다.',
-    traits: ['진정성', '감수성', '창의적 표현', '이상주의', '독립적 가치관'],
-    palette: [['#ffecd2','피치 크림'],['#fcb69f','살몬'],['#a8dadc','파스텔 티파니'],['#457b9d','스틸 블루'],['#e8e4dc','아이보리']],
-    strengths: [['감수성', 96], ['창의성', 92], ['진정성', 98], ['공감', 88], ['대담성', 48]],
-    comm: '감성적이고 시적인 언어. 진심을 담아 소통하며 표면적 대화보다 깊은 연결을 추구합니다. 예술적 표현이 자신을 드러내는 도구입니다.',
-    career: '작가, 시인, 그래픽 디자이너, 사진작가, 음악가, NGO 활동가, 영화감독',
-    style: [['🌸','낭만적 에디토리얼','감성과 이야기가 담긴 스타일링'],['🎭','빈티지 & 아트','고유한 감성의 빈티지 믹스'],['🌿','자연 영감','소재와 텍스처로 표현하는 진정성']],
-    slogan: '"나는 진심으로 존재한다"', sloganNote: '감수성과 진정성이 빚어내는 당신만의 세계',
-  },
-  ENFJ: {
-    archetype: '사람의 빛', archdesc: '타인의 가능성을 발견하고 성장을 이끄는 따뜻한 촉매자. 카리스마 있는 소통으로 공동체에 영감을 줍니다.',
-    traits: ['영감을 주는 리더십', '공감 능력', '따뜻한 카리스마', '사람 중심', '비전 공유'],
-    palette: [['#ff9a3c','선셋 오렌지'],['#ff6b6b','코랄'],['#ffd93d','선샤인'],['#1a1a2e','딥 네이비'],['#f8f9fa','화이트']],
-    strengths: [['공감', 96], ['리더십', 92], ['소통력', 96], ['영향력', 90], ['객관성', 58]],
-    comm: '열정적이고 포용적. 모든 사람이 참여할 수 있도록 분위기를 만들며, 칭찬과 격려로 잠재력을 이끌어냅니다.',
-    career: '코치, 교육자, HR 리더, 홍보전략가, 비영리 디렉터, 연예기획자, 정치인',
-    style: [['☀️','따뜻한 존재감','온기 있는 컬러의 환영받는 스타일'],['🤝','소셜 시그니처','대화의 시작이 되는 특별한 아이템'],['🌈','활기찬 팔레트','에너지와 긍정을 담은 컬러 선택']],
-    slogan: '"나는 모두를 빛나게 한다"', sloganNote: '사람을 연결하고 성장시키는 당신의 존재 가치',
-  },
-  ENFP: {
-    archetype: '자유로운 연결자', archdesc: '사람과 아이디어 사이에서 불꽃을 일으키는 열정적인 탐험가. 진정성 있는 에너지로 주변에 가능성의 씨앗을 심습니다.',
-    traits: ['열정', '창의적 연결', '진정성', '자유로운 사고', '사람에 대한 관심'],
-    palette: [['#ff9ff3','핑크 라벤더'],['#54a0ff','스카이 블루'],['#ffeaa7','레몬 옐로'],['#00d2d3','터쿼이즈'],['#ff6b81','로즈']],
-    strengths: [['열정', 98], ['창의성', 90], ['소통력', 92], ['공감', 86], ['집중력', 50]],
-    comm: '자연스럽고 열정적. 이야기로 사람을 연결하며, 유머와 진심이 뒤섞인 매력적인 소통 방식. 브레인스토밍에서 최고의 파트너입니다.',
-    career: '콘텐츠 크리에이터, 마케터, 배우, 코치, 이벤트 기획자, 브랜드 디렉터',
-    style: [['🦋','보헤미안 시크','자유로운 영혼의 레이어드 스타일'],['🌺','컬러풀 어센트','활기찬 포인트 컬러 과감하게 활용'],['✨','독창적 믹스','나만의 스타일 규칙 없는 레이어링']],
-    slogan: '"나는 삶을 즐기며 연결한다"', sloganNote: '열정과 진정성으로 모든 순간을 특별하게 만드는 당신',
-  },
-  ISTJ: {
-    archetype: '신뢰의 기반', archdesc: '꾸준한 성실함과 철저한 책임감으로 조직의 기둥이 되는 믿음직한 전문가. 약속을 지키고 기준을 세웁니다.',
-    traits: ['신뢰성', '책임감', '체계성', '꼼꼼함', '성실함'],
-    palette: [['#1b2838','네이비'],['#2c3e50','다크 슬레이트'],['#7f8c8d','스틸 그레이'],['#ecf0f1','라이트 그레이'],['#c9a84c','골드']],
-    strengths: [['신뢰성', 98], ['성실함', 96], ['책임감', 95], ['체계성', 94], ['즉흥성', 40]],
-    comm: '명확하고 사실에 기반한 소통. 말보다 행동으로 신뢰를 쌓으며, 구체적인 수치와 데이터로 설득합니다.',
-    career: '회계사, 법조인, 의사, 엔지니어, 프로젝트 매니저, 군인, 공무원',
-    style: [['👔','클래식 프로페셔널','시간이 지나도 흔들리지 않는 베이직'],['⌚','퀄리티 우선','오래 입을 수 있는 고품질 소재 선택'],['📏','정갈한 피팅','깔끔하고 단정한 실루엣 유지']],
-    slogan: '"나는 말한 대로 한다"', sloganNote: '신뢰와 성실함으로 세워지는 당신의 평판',
-  },
-  ISFJ: {
-    archetype: '따뜻한 수호자', archdesc: '세심한 배려와 헌신으로 주변 사람들을 지키는 따뜻한 보호자. 눈에 띄지 않아도 없어서는 안 될 소중한 존재입니다.',
-    traits: ['배려심', '헌신', '세심함', '신뢰성', '따뜻함'],
-    palette: [['#f0e6d3','버터 크림'],['#d4a853','허니 골드'],['#8fbc8f','세이지 그린'],['#6b4c3b','초콜릿'],['#f8f0e3','오프 화이트']],
-    strengths: [['배려', 98], ['성실함', 94], ['신뢰성', 96], ['섬세함', 92], ['자기표현', 52]],
-    comm: '부드럽고 따뜻한 어조. 경청에 뛰어나며 상대의 필요를 먼저 파악합니다. 1:1 관계에서 진가를 발휘합니다.',
-    career: '간호사, 교사, 사회복지사, 영양사, 카운슬러, 인테리어 디자이너, 사서',
-    style: [['🌷','내추럴 엘레강스','자연에서 영감받은 부드러운 스타일'],['🏡','컴포트 시크','편안하면서도 정제된 홈 어웨어 감성'],['🍃','어스 톤','따뜻한 대지색 팔레트로 온기 표현']],
-    slogan: '"나는 조용히 당신 곁에 있다"', sloganNote: '헌신과 배려가 만드는 당신의 소중한 존재감',
-  },
-  ESTJ: {
-    archetype: '효율의 설계자', archdesc: '명확한 기준과 체계적인 실행력으로 조직을 이끄는 관리의 달인. 질서와 효율로 목표를 달성합니다.',
-    traits: ['조직 관리', '실행력', '리더십', '책임감', '결단력'],
-    palette: [['#003366','로열 블루'],['#cc0000','딥 레드'],['#f5f5f5','라이트 그레이'],['#333333','차콜'],['#c9a84c','골드']],
-    strengths: [['실행력', 95], ['리더십', 92], ['조직 관리', 97], ['결단력', 90], ['유연성', 50]],
-    comm: '직접적이고 권위 있는 소통. 명확한 지시와 기대치를 전달하며 결과 중심으로 말합니다. 공식적 채널을 선호합니다.',
-    career: '경영자, 군 장교, 판사, 부동산 개발자, 공장장, 은행장, 학교장',
-    style: [['🏛️','인스티튜셔널 클래식','권위와 신뢰를 담은 파워 수트'],['🔵','네이비 & 그레이','전통과 안정감을 상징하는 컬러'],['💼','구조적 액세서리','지위와 전문성을 드러내는 아이템']],
-    slogan: '"나는 결과로 말한다"', sloganNote: '실행력과 리더십으로 성과를 만드는 당신',
-  },
-  ESFJ: {
-    archetype: '커뮤니티 빌더', archdesc: '사람들을 하나로 모으고 관계를 가꾸는 천생 연결자. 모두가 소속감을 느낄 수 있도록 환경을 만듭니다.',
-    traits: ['사교성', '배려', '공동체 의식', '따뜻함', '실용적 도움'],
-    palette: [['#ff8c94','로즈 핑크'],['#ffd700','선플라워'],['#98fb98','민트 그린'],['#87ceeb','스카이 블루'],['#fff8dc','크림']],
-    strengths: [['사교성', 96], ['배려', 94], ['팀워크', 95], ['친화력', 97], ['독립성', 52]],
-    comm: '활기차고 친근한 소통. 모든 사람을 환영하며 갈등을 해소하는 역할을 자연스럽게 맡습니다. 칭찬과 감사 표현에 능합니다.',
-    career: '이벤트 플래너, 교사, 간호사, 인사 담당자, 세일즈, 리셉셔니스트, 행사 코디네이터',
-    style: [['🎀','친근한 프레피','모두에게 호감을 주는 정돈된 스타일'],['💛','밝은 포인트 컬러','긍정적 에너지를 전달하는 컬러 선택'],['👗','트레디셔널 패션','트렌드를 반영하되 무난하게 소화']],
-    slogan: '"나는 모두의 집이 된다"', sloganNote: '따뜻한 연결과 공동체로 풍성한 세상을 만드는 당신',
-  },
-  ISTP: {
-    archetype: '실용적 장인', archdesc: '손과 머리로 세상을 탐구하는 문제 해결사. 위기 상황에서 냉철하게 최적 해답을 찾아내는 실용주의자입니다.',
-    traits: ['실용성', '문제 해결', '자율성', '관찰력', '기술적 역량'],
-    palette: [['#2d2d2d','딥 차콜'],['#4a4a4a','그라파이트'],['#c0392b','인더스트리얼 레드'],['#bdc3c7','메탈릭 실버'],['#f39c12','앰버']],
-    strengths: [['실용적 문제 해결', 97], ['기술력', 94], ['냉정함', 92], ['자율성', 96], ['감정 표현', 40]],
-    comm: '간결하고 사실 중심. 긴 설명보다 시연을 선호하며, 필요한 말만 합니다. 직접적이고 솔직한 피드백을 줍니다.',
-    career: '엔지니어, 파일럿, 소방관, 외과의, 포렌식 전문가, 메카닉, 스포츠 선수',
-    style: [['🔧','테크 캐주얼','기능성과 스타일을 결합한 실용적 룩'],['⚡','어반 인더스트리얼','도시적인 강인함을 담은 스트리트'],['🖤','모노크롬 스트릭','군더더기 없는 블랙&그레이 조합']],
-    slogan: '"나는 해낸다, 말 없이"', sloganNote: '행동과 실력으로 증명하는 당신의 가치',
-  },
-  ISFP: {
-    archetype: '감각의 예술가', archdesc: '오감으로 세상을 경험하고 아름다움을 창조하는 자유로운 영혼. 진정성 있는 자기표현으로 독자적인 미학을 완성합니다.',
-    traits: ['감각적 심미안', '창의성', '진정성', '자유로움', '친절함'],
-    palette: [['#e8b4b8','더스티 로즈'],['#a8c5a0','세이지'],['#f4d03f','머스타드'),['#87a7c0','더스티 블루'],['#d4a853','테라코타']],
-    strengths: [['미적 감각', 97], ['창의성', 92], ['진정성', 96], ['공감', 86], ['계획성', 44]],
-    comm: '비언어적 표현이 풍부하며 감성적인 소통을 합니다. 직접적 갈등보다 예술적 표현으로 자신을 드러냅니다.',
-    career: '패션 디자이너, 사진작가, 화가, 플로리스트, 요리사, 음악가, 헤어 아티스트',
-    style: [['🎨','아티스틱 보헤미안','나만의 미학을 담은 독특한 레이어링'],['🌸','소프트 로맨틱','파스텔과 플로랄의 감성적 표현'],['💫','독창적 아이템','한 개의 특별한 빈티지 피스로 완성']],
-    slogan: '"나는 아름다움으로 말한다"', sloganNote: '감각과 진정성으로 세상에 색을 더하는 당신',
-  },
-  ESTP: {
-    archetype: '역동적 실행가', archdesc: '현재에 충실하며 빠른 판단과 대담한 행동으로 기회를 포착하는 타고난 기업가. 위험을 즐기고 경험으로 배웁니다.',
-    traits: ['대담함', '행동력', '현실 감각', '설득력', '적응력'],
-    palette: [['#e74c3c','비비드 레드'],['#f39c12','에너제틱 오렌지'],['#2c3e50','네이비'],['#ecf0f1','라이트'],['#27ae60','다이나믹 그린']],
-    strengths: [['행동력', 97], ['적응력', 94], ['설득력', 92], ['현실 감각', 95], ['인내심', 48]],
-    comm: '활기차고 직접적. 유머로 분위기를 주도하며 즉흥적인 상황 대처에 탁월합니다. 협상과 세일즈에서 타고난 재능을 발휘합니다.',
-    career: '창업가, 세일즈 디렉터, 스포츠 에이전트, 금융 트레이더, 응급 구조사, 배우',
-    style: [['🏎️','다이나믹 스포티','에너지와 자신감이 드러나는 스포티 룩'],['🔴','임팩트 컬러','시선을 집중시키는 강렬한 시그니처 컬러'],['💥','스테이트먼트 피스','대화를 시작하게 만드는 bold 아이템']],
-    slogan: '"나는 지금 이 순간을 정복한다"', sloganNote: '대담한 행동과 현장 감각으로 기회를 만드는 당신',
-  },
-  ESFP: {
-    archetype: '무대의 주인공', archdesc: '존재 자체가 에너지인 타고난 엔터테이너. 사람들에게 기쁨을 선사하고 모든 순간을 특별한 경험으로 만들어냅니다.',
-    traits: ['에너지', '유머', '자발성', '사교성', '현재 지향'],
-    palette: [['#ff79c6','핫 핑크'],['#bd93f9','라벤더'],['#50fa7b','네온 그린'],['#f1fa8c','레몬'],['#ff5555','비비드 레드']],
-    strengths: [['에너지', 98], ['사교성', 97], ['유머', 95], ['자발성', 94], ['미래 계획', 42]],
-    comm: '극도로 활기차고 표현력이 풍부합니다. 스토리텔링과 유머로 청중을 사로잡으며 그 자리에 있는 모든 사람이 편안해집니다.',
-    career: '배우, 방송인, 이벤트 기획자, 라이프스타일 크리에이터, 세일즈, 관광 가이드, DJ',
-    style: [['🎤','쇼맨십 패션','시선을 사로잡는 눈에 띄는 스타일'],['🌈','풀 스펙트럼 컬러','제한 없는 자유로운 컬러 표현'],['✨','글램 포인트','화려함을 더해주는 반짝이는 액세서리']],
-    slogan: '"나는 모든 순간을 무대로 만든다"', sloganNote: '에너지와 기쁨으로 세상을 빛나게 하는 당신',
-  },
-};
-
-const FACE_DATA = {
-  oval: {
-    tip: '가장 균형 잡힌 얼굴형. 대부분의 헤어스타일과 안경 프레임이 잘 어울립니다. 얼굴 라인을 살리는 깔끔한 스타일로 자연스러운 균형미를 강조하세요.',
-    keywords: ['균형미', '다재다능', '자연스러운 완성형'],
-  },
-  round: {
-    tip: '부드럽고 귀여운 인상. 세로 라인을 강조하여 얼굴을 갸름하게 연출하세요. 깊은 V넥, 기장이 긴 목걸이, 앵귤러한 안경 프레임이 효과적입니다.',
-    keywords: ['귀여움', '친근함', '소프트 카리스마'],
-  },
-  square: {
-    tip: '강인하고 신뢰감 있는 인상. 부드러운 곡선 라인을 더해 균형을 맞추세요. 레이어드 헤어, 둥근 안경 프레임, 스카프 활용이 도움됩니다.',
-    keywords: ['강인함', '신뢰감', '파워 존재감'],
-  },
-  heart: {
-    tip: '이마가 넓고 턱이 좁은 우아한 형태. 아래쪽에 볼륨을 더해 균형을 만드세요. A라인 스커트, 보트넥 상의, 살짝 퍼지는 헤어스타일이 잘 어울립니다.',
-    keywords: ['우아함', '섬세함', '청순 매력'],
-  },
-  long: {
-    tip: '세련되고 지적인 인상. 가로 라인을 더해 얼굴 비율을 조정하세요. 앞머리, 와이드 프레임 안경, 가로 무늬 패턴 활용을 추천합니다.',
-    keywords: ['세련됨', '지적 이미지', '아티스틱'],
-  },
-  diamond: {
-    tip: '광대뼈가 돋보이는 매력적인 얼굴형. 이마와 턱을 강조하여 균형을 잡으세요. 볼륨감 있는 탑헤어, 가는 프레임 안경, 미니멀한 귀걸이가 잘 어울립니다.',
-    keywords: ['강렬함', '독특함', '개성 있는 매력'],
-  },
-};
-
-const ZODIAC = [
-  {name:'염소자리',emoji:'♑',dates:'12.22~1.19',energy:'인내와 야망으로 정상을 향해 나아가는 현실주의자. 장기적 목표를 위해 꾸준히 쌓아가는 힘을 가집니다.'},
-  {name:'물병자리',emoji:'♒',dates:'1.20~2.18',energy:'독립적이고 혁신적인 사고의 소유자. 미래지향적 아이디어로 세상에 변화를 가져오는 비전가입니다.'},
-  {name:'물고기자리',emoji:'♓',dates:'2.19~3.20',energy:'감수성이 풍부하고 공감 능력이 탁월한 몽상가. 예술적 영감과 직관으로 세상의 아름다움을 포착합니다.'},
-  {name:'양자리',emoji:'♈',dates:'3.21~4.19',energy:'선구자적 에너지와 불굴의 용기를 지닌 개척자. 새로운 시작에서 두려움 없이 앞장서는 리더입니다.'},
-  {name:'황소자리',emoji:'♉',dates:'4.20~5.20',energy:'안정과 풍요를 중시하는 인내의 실천가. 아름다움과 감각적인 것에 대한 깊은 이해를 가집니다.'},
-  {name:'쌍둥이자리',emoji:'♊',dates:'5.21~6.21',energy:'지적 호기심과 언어 능력이 뛰어난 소통의 달인. 다양한 분야를 넘나들며 아이디어를 연결합니다.'},
-  {name:'게자리',emoji:'♋',dates:'6.22~7.22',energy:'깊은 감정과 직관을 바탕으로 사람들을 품는 보호자. 가족과 커뮤니티에 강한 애착과 헌신을 가집니다.'},
-  {name:'사자자리',emoji:'♌',dates:'7.23~8.22',energy:'태양처럼 빛나는 자신감과 창의성의 소유자. 타고난 무대 감각으로 사람들에게 영감을 줍니다.'},
-  {name:'처녀자리',emoji:'♍',dates:'8.23~9.22',energy:'분석적이고 세심한 완벽주의자. 디테일에서 의미를 찾고 지속적인 개선을 통해 탁월함을 추구합니다.'},
-  {name:'천칭자리',emoji:'♎',dates:'9.23~10.23',energy:'균형과 조화를 추구하는 심미주의자. 아름다운 인간관계와 공정한 판단으로 세상을 이롭게 합니다.'},
-  {name:'전갈자리',emoji:'♏',dates:'10.24~11.21',energy:'깊은 통찰과 강렬한 집중력을 가진 탐구자. 숨겨진 진실을 파헤치고 변화와 부활의 힘을 갖습니다.'},
-  {name:'사수자리',emoji:'♐',dates:'11.22~12.21',energy:'자유와 탐험을 갈망하는 철학적 모험가. 지식의 지평을 넓히며 삶의 의미를 추구합니다.'},
-];
-
-function getZodiac(month, day) {
-  const md = month * 100 + day;
-  if (md >= 1222 || md <= 119) return ZODIAC[0];
-  if (md <= 218) return ZODIAC[1];
-  if (md <= 320) return ZODIAC[2];
-  if (md <= 419) return ZODIAC[3];
-  if (md <= 520) return ZODIAC[4];
-  if (md <= 621) return ZODIAC[5];
-  if (md <= 722) return ZODIAC[6];
-  if (md <= 822) return ZODIAC[7];
-  if (md <= 922) return ZODIAC[8];
-  if (md <= 1023) return ZODIAC[9];
-  if (md <= 1121) return ZODIAC[10];
-  return ZODIAC[11];
-}
-
-function getLifePathNumber(dateStr) {
-  const digits = dateStr.replace(/-/g,'').split('').map(Number);
-  let sum = digits.reduce((a,b)=>a+b,0);
-  while (sum > 9 && sum !== 11 && sum !== 22 && sum !== 33) {
-    sum = String(sum).split('').map(Number).reduce((a,b)=>a+b,0);
-  }
-  return sum;
-}
-
-function getAge(dateStr) {
-  const today = new Date();
-  const birth = new Date(dateStr);
-  let age = today.getFullYear() - birth.getFullYear();
-  const m = today.getMonth() - birth.getMonth();
-  if (m < 0 || (m === 0 && today.getDate() < birth.getDate())) age--;
-  return age;
-}
-
-function analyze() {
-  const dob = document.getElementById('dob').value;
-  const mbti = document.getElementById('mbti').value;
-  const face = document.getElementById('face').value;
-
-  if (!dob || !mbti || !face) {
-    alert('세 가지 항목을 모두 입력해주세요.');
-    return;
-  }
-
-  const d = new Date(dob);
-  const month = d.getMonth() + 1;
-  const day = d.getDate();
-  const zodiac = getZodiac(month, day);
-  const lifeNum = getLifePathNumber(dob);
-  const age = getAge(dob);
-  const md = mbtiData = MBTI_DATA[mbti];
-  const fd = FACE_DATA[face];
-
-  // Name / tagline
-  document.getElementById('res-name').textContent = `${mbti} · ${zodiac.name} · ${fd.keywords[0]}`;
-  document.getElementById('res-tagline').textContent = `${age}세 | 생명수 ${lifeNum} | ${zodiac.emoji} ${zodiac.name}`;
-
-  // Archetype
-  document.getElementById('res-archetype').textContent = md.archetype;
-  document.getElementById('res-archdesc').textContent = md.archdesc;
-  const traitsEl = document.getElementById('res-traits');
-  traitsEl.innerHTML = [...md.traits, ...fd.keywords].map(t=>`<span class="trait">${t}</span>`).join('');
-
-  // Palette
-  const palEl = document.getElementById('res-palette');
-  palEl.innerHTML = md.palette.map(([color,name])=>`
-    <div class="swatch-item">
-      <div class="swatch" style="background:${color}"></div>
-      <div class="swatch-name">${name}</div>
-    </div>`).join('');
-
-  // Style
-  const styleEl = document.getElementById('res-style');
-  styleEl.innerHTML = md.style.map(([icon,label,desc])=>`
-    <div class="style-block">
-      <div class="style-icon">${icon}</div>
-      <div class="style-label">${label}</div>
-      <div class="style-desc">${desc}</div>
-    </div>`).join('');
-
-  // Strengths
-  const strEl = document.getElementById('res-strengths');
-  strEl.innerHTML = md.strengths.map(([label, val])=>`
-    <div class="strength-item">
-      <div class="strength-meta">
-        <span class="strength-label">${label}</span>
-        <span class="strength-val">${val}</span>
+<!-- Works -->
+<section id="works">
+  <div class="container">
+    <div class="works-hd r">
+      <div>
+        <p class="label">Selected Work</p>
+        <h2 class="h2" style="margin-bottom:0">Results that speak<br>for themselves</h2>
       </div>
-      <div class="bar-bg"><div class="bar-fill" data-width="${val}"></div></div>
-    </div>`).join('');
+      <a href="#contact" class="btn-o">View All Projects →</a>
+    </div>
+    <div class="works-grid">
+      <div class="wcard r">
+        <img class="wthumb" src="https://picsum.photos/seed/nx1/1200/500" alt="FinScale">
+        <div class="woverlay">
+          <div class="wtags"><span class="wtag">Branding</span><span class="wtag">UI/UX</span><span class="wtag">Development</span></div>
+          <div class="wtitle">FinScale — Next-gen banking platform</div>
+        </div>
+      </div>
+      <div class="wcard r d1">
+        <img class="wthumb" src="https://picsum.photos/seed/nx2/700/530" alt="Axiom">
+        <div class="woverlay">
+          <div class="wtags"><span class="wtag">Branding</span><span class="wtag">Motion</span></div>
+          <div class="wtitle">Axiom SaaS — Brand identity</div>
+        </div>
+      </div>
+      <div class="wcard r d2">
+        <img class="wthumb" src="https://picsum.photos/seed/nx3/700/530" alt="MedCore">
+        <div class="woverlay">
+          <div class="wtags"><span class="wtag">UI/UX</span><span class="wtag">Web Design</span></div>
+          <div class="wtitle">MedCore — Healthcare dashboard</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
 
-  // Comm / Career
-  document.getElementById('res-comm').textContent = md.comm;
-  document.getElementById('res-career').textContent = md.career;
+<!-- Physics -->
+<div id="physics">
+  <p id="physics-lbl">Drag the tags ↓</p>
+  <canvas id="mc"></canvas>
+</div>
 
-  // Face
-  document.getElementById('res-face').textContent = fd.tip;
+<!-- Services -->
+<section id="services">
+  <div class="container">
+    <div class="srv-grid">
+      <div class="srv-sticky r">
+        <p class="label">What We Do</p>
+        <h2 class="h2">End-to-end<br>digital services</h2>
+        <p class="desc">From brand strategy to pixel-perfect interfaces and performant code — we cover the full digital product lifecycle.</p>
+        <a href="#contact" class="btn-p" style="margin-top:32px">Start a Project →</a>
+      </div>
+      <ul class="srv-list r d1">
+        <li class="si"><div class="si-hd" onclick="toggleSrv(this)"><span class="si-num">01</span><span class="si-name">Website Design</span><span class="si-arr">→</span></div><div class="si-body"><p class="si-desc">High-converting, beautifully crafted websites tailored for your brand and audience — strategy to launch.</p></div></li>
+        <li class="si"><div class="si-hd" onclick="toggleSrv(this)"><span class="si-num">02</span><span class="si-name">Brand Identity</span><span class="si-arr">→</span></div><div class="si-body"><p class="si-desc">Logo, color systems, typography, and guidelines that position your company with clarity and confidence.</p></div></li>
+        <li class="si"><div class="si-hd" onclick="toggleSrv(this)"><span class="si-num">03</span><span class="si-name">UX/UI Design</span><span class="si-arr">→</span></div><div class="si-body"><p class="si-desc">Intuitive product experiences built around user research, interaction design, and systematic components.</p></div></li>
+        <li class="si"><div class="si-hd" onclick="toggleSrv(this)"><span class="si-num">04</span><span class="si-name">Motion Design</span><span class="si-arr">→</span></div><div class="si-body"><p class="si-desc">Brand animations, UI micro-interactions, and explainer videos that bring your product story to life.</p></div></li>
+        <li class="si"><div class="si-hd" onclick="toggleSrv(this)"><span class="si-num">05</span><span class="si-name">SEO &amp; Performance</span><span class="si-arr">→</span></div><div class="si-body"><p class="si-desc">Technical SEO, Core Web Vitals optimization, and content strategies that drive measurable organic growth.</p></div></li>
+        <li class="si"><div class="si-hd" onclick="toggleSrv(this)"><span class="si-num">06</span><span class="si-name">Landing Pages</span><span class="si-arr">→</span></div><div class="si-body"><p class="si-desc">Conversion-optimized landing pages for product launches, paid campaigns, and demand-gen initiatives.</p></div></li>
+        <li class="si"><div class="si-hd" onclick="toggleSrv(this)"><span class="si-num">07</span><span class="si-name">Content Strategy</span><span class="si-arr">→</span></div><div class="si-body"><p class="si-desc">Messaging frameworks, case studies, and thought leadership that builds authority and fills pipeline.</p></div></li>
+        <li class="si"><div class="si-hd" onclick="toggleSrv(this)"><span class="si-num">08</span><span class="si-name">Development</span><span class="si-arr">→</span></div><div class="si-body"><p class="si-desc">React, Next.js, and Webflow — clean, performant code that developers and marketers both love.</p></div></li>
+      </ul>
+    </div>
+  </div>
+</section>
 
-  // Zodiac
-  document.getElementById('res-zodiac').textContent = `${zodiac.emoji} ${zodiac.name} (${zodiac.dates})\n\n${zodiac.energy}`;
-  document.getElementById('res-zodiac').style.whiteSpace = 'pre-wrap';
+<!-- Stats -->
+<section id="stats">
+  <div class="container">
+    <div class="stats-grid">
+      <div class="r"><div class="stat-n" data-target="120" data-suf="+">0</div><div class="stat-l">Projects delivered</div></div>
+      <div class="r d1"><div class="stat-n" data-target="98" data-suf="%">0</div><div class="stat-l">Client satisfaction</div></div>
+      <div class="r d2"><div class="stat-n" data-target="18" data-suf="+">0</div><div class="stat-l">Countries served</div></div>
+      <div class="r d3"><div class="stat-n" data-target="7" data-suf="x">0</div><div class="stat-l">Average ROI boost</div></div>
+    </div>
+  </div>
+</section>
 
-  // Slogan
-  document.getElementById('res-slogan').textContent = md.slogan;
-  document.getElementById('res-slogan-note').textContent = md.sloganNote;
+<!-- Testimonials -->
+<section id="testimonials">
+  <div class="container">
+    <div style="margin-bottom:52px" class="r">
+      <p class="label">Testimonials</p>
+      <h2 class="h2">Trusted by<br>growth-stage teams</h2>
+    </div>
+    <div class="swiper r d1" id="tswiper">
+      <div class="swiper-wrapper">
+        <div class="swiper-slide"><div class="tcard"><p class="tquote">"Working with NEXUS completely transformed how prospects perceive our product. The new website converted 40% better in the first month. Their process was thorough, fast, and results exceeded every expectation."</p><div class="tauthor"><div class="tavatar"><img src="https://picsum.photos/seed/av1/44/44" alt="Sarah Chen"></div><div><div class="tname">Sarah Chen</div><div class="trole">CMO at FinScale, Series B</div></div></div></div></div>
+        <div class="swiper-slide"><div class="tcard"><p class="tquote">"The rebrand gave us the credibility needed to close enterprise deals we were losing before. NEXUS understood our space deeply and delivered something premium yet approachable. Exactly what we needed."</p><div class="tauthor"><div class="tavatar"><img src="https://picsum.photos/seed/av2/44/44" alt="Marcus Rivera"></div><div><div class="tname">Marcus Rivera</div><div class="trole">CEO at Axiom Cloud</div></div></div></div></div>
+        <div class="swiper-slide"><div class="tcard"><p class="tquote">"I've worked with many agencies — NEXUS is different. They push back when needed, care about outcomes not just deliverables, and their design quality is consistently world-class. We've extended our retainer three times."</p><div class="tauthor"><div class="tavatar"><img src="https://picsum.photos/seed/av3/44/44" alt="Aisha Patel"></div><div><div class="tname">Aisha Patel</div><div class="trole">VP Product at MedCore</div></div></div></div></div>
+        <div class="swiper-slide"><div class="tcard"><p class="tquote">"From kickoff to launch in 6 weeks. Our old site took 6 months to build and looked half as good. NEXUS delivers real business results — our SEO traffic is up 180% in three months."</p><div class="tauthor"><div class="tavatar"><img src="https://picsum.photos/seed/av4/44/44" alt="Tom Blackwell"></div><div><div class="tname">Tom Blackwell</div><div class="trole">Founder at Velocity SaaS</div></div></div></div></div>
+      </div>
+      <div class="swiper-scrollbar"></div>
+    </div>
+  </div>
+</section>
 
-  // Show results
-  const results = document.getElementById('results');
-  results.classList.add('visible');
-  document.getElementById('formSection').style.display = 'none';
+<!-- Contact -->
+<section id="contact">
+  <div class="container">
+    <div class="ct-grid">
+      <div class="ct-info r">
+        <p class="label">Get In Touch</p>
+        <h2>Ready to<br>scale faster?</h2>
+        <p>Tell us about your project and we'll get back within 24 hours with a tailored proposal.</p>
+        <div class="ct-details">
+          <div class="ct-item"><div class="ct-icon">📧</div><span>hello@nexus.studio</span></div>
+          <div class="ct-item"><div class="ct-icon">📍</div><span>Seoul · San Francisco · London</span></div>
+          <div class="ct-item"><div class="ct-icon">⏱️</div><span>Response within 24 hours</span></div>
+        </div>
+      </div>
+      <div class="r d1">
+        <form id="cform" onsubmit="sendForm(event)">
+          <div class="fg">
+            <div class="f"><label>Name</label><input type="text" placeholder="Alex Johnson" required></div>
+            <div class="f"><label>Company</label><input type="text" placeholder="Acme Inc."></div>
+            <div class="f"><label>Email</label><input type="email" placeholder="alex@acme.com" required></div>
+            <div class="f"><label>Budget</label>
+              <select><option value="">Select budget</option><option>$10k – $30k</option><option>$30k – $80k</option><option>$80k+</option><option>Monthly retainer</option></select>
+            </div>
+            <div class="f full"><label>Services Needed</label>
+              <div class="cbox-grid">
+                <label class="cbox"><input type="checkbox"><span>Website Design</span></label>
+                <label class="cbox"><input type="checkbox"><span>Brand Identity</span></label>
+                <label class="cbox"><input type="checkbox"><span>UX/UI Design</span></label>
+                <label class="cbox"><input type="checkbox"><span>Motion Design</span></label>
+                <label class="cbox"><input type="checkbox"><span>SEO &amp; Performance</span></label>
+                <label class="cbox"><input type="checkbox"><span>Development</span></label>
+              </div>
+            </div>
+            <div class="f full"><label>Project Description</label><textarea placeholder="Tell us about your project goals, timeline, and requirements..."></textarea></div>
+            <div class="f-submit"><button type="submit" class="btn-p">Send Message →</button></div>
+          </div>
+        </form>
+        <div class="success-box" id="success">
+          <div class="s-ico">✅</div>
+          <div class="s-t">Message sent!</div>
+          <div class="s-s">We'll be in touch within 24 hours.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
 
-  setTimeout(()=>{
-    results.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    document.querySelectorAll('.bar-fill').forEach(bar=>{
-      bar.style.width = bar.dataset.width + '%';
-    });
-  }, 100);
+<!-- Footer -->
+<footer>
+  <div class="container">
+    <div class="ft-top">
+      <div class="ft-brand">
+        <a href="#home" class="logo">NEXUS<span>.</span></a>
+        <p>Digital design &amp; development studio for B2B tech companies that want to look as good as they perform.</p>
+        <div class="ft-social">
+          <a href="#" class="soc" aria-label="Dribbble">🎨</a>
+          <a href="#" class="soc" aria-label="LinkedIn" style="font-weight:700;font-size:13px">in</a>
+          <a href="#" class="soc" aria-label="Instagram">◎</a>
+          <a href="#" class="soc" aria-label="X" style="font-size:13px;font-weight:700">𝕏</a>
+        </div>
+      </div>
+      <div class="ft-col">
+        <h4>Services</h4>
+        <ul>
+          <li><a href="#services">Website Design</a></li>
+          <li><a href="#services">Brand Identity</a></li>
+          <li><a href="#services">UX/UI Design</a></li>
+          <li><a href="#services">Motion Design</a></li>
+          <li><a href="#services">SEO &amp; Performance</a></li>
+        </ul>
+      </div>
+      <div class="ft-col">
+        <h4>Industries</h4>
+        <ul>
+          <li><a href="#">Fintech</a></li>
+          <li><a href="#">Healthcare</a></li>
+          <li><a href="#">SaaS</a></li>
+          <li><a href="#">AI &amp; Web3</a></li>
+          <li><a href="#">E-commerce</a></li>
+        </ul>
+      </div>
+      <div class="ft-col">
+        <h4>Company</h4>
+        <ul>
+          <li><a href="#">About</a></li>
+          <li><a href="#works">Portfolio</a></li>
+          <li><a href="#">Blog</a></li>
+          <li><a href="#contact">Contact</a></li>
+          <li><a href="#">Careers</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="ft-bot">
+      <p>© 2024 NEXUS Studio. All rights reserved.</p>
+      <p>Privacy Policy · Terms of Service</p>
+    </div>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/matter-js/0.19.0/matter.min.js"></script>
+<script>
+// Nav scroll
+window.addEventListener('scroll', () => {
+  document.getElementById('nav').style.borderBottomColor =
+    scrollY > 40 ? 'rgba(255,255,255,0.12)' : 'rgba(255,255,255,0.08)';
+});
+
+// Mobile menu
+document.getElementById('ham').onclick = () => document.getElementById('mob').classList.add('open');
+document.getElementById('mob-close').onclick = () => document.getElementById('mob').classList.remove('open');
+document.querySelectorAll('.mob-menu a').forEach(a => a.onclick = () => document.getElementById('mob').classList.remove('open'));
+
+// Smooth scroll with nav offset
+document.querySelectorAll('a[href^="#"]').forEach(a => {
+  a.addEventListener('click', e => {
+    const t = document.querySelector(a.getAttribute('href'));
+    if (t) { e.preventDefault(); window.scrollTo({ top: t.getBoundingClientRect().top + scrollY - 80, behavior: 'smooth' }); }
+  });
+});
+
+// Reveal on scroll
+const ro = new IntersectionObserver(entries => entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('v'); }), { threshold: 0.1 });
+document.querySelectorAll('.r').forEach(el => ro.observe(el));
+
+// Services accordion
+function toggleSrv(hd) {
+  const item = hd.parentElement;
+  const open = item.classList.contains('open');
+  document.querySelectorAll('.si').forEach(i => i.classList.remove('open'));
+  if (!open) item.classList.add('open');
 }
 
-function reset() {
-  document.getElementById('results').classList.remove('visible');
-  document.getElementById('formSection').style.display = 'block';
-  window.scrollTo({ top: 0, behavior: 'smooth' });
+// Stats counter
+const so = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (!e.isIntersecting) return;
+    const el = e.target.querySelector('.stat-n');
+    if (!el || el.dataset.done) return;
+    el.dataset.done = '1';
+    const target = +el.dataset.target;
+    const suf = el.dataset.suf;
+    const t0 = performance.now();
+    const dur = 1800;
+    (function go(now) {
+      const p = Math.min((now - t0) / dur, 1);
+      const ease = 1 - Math.pow(1 - p, 3);
+      el.textContent = Math.round(target * ease) + suf;
+      if (p < 1) requestAnimationFrame(go);
+    })(t0);
+  });
+}, { threshold: 0.4 });
+document.querySelectorAll('#stats .r').forEach(el => so.observe(el));
+
+// Swiper
+new Swiper('#tswiper', {
+  slidesPerView: 1.1, spaceBetween: 18,
+  scrollbar: { el: '.swiper-scrollbar', draggable: true },
+  breakpoints: { 640: { slidesPerView: 1.5 }, 1024: { slidesPerView: 2.2 } }
+});
+
+// Matter.js
+(function() {
+  const { Engine, Render, Runner, Bodies, Body, Events, Mouse, MouseConstraint, World, Composite } = Matter;
+  const canvas = document.getElementById('mc');
+  const W = canvas.parentElement.offsetWidth, H = 300;
+  canvas.width = W; canvas.height = H;
+  const engine = Engine.create({ gravity: { y: 0.5 } });
+  const render = Render.create({ canvas, engine, options: { width: W, height: H, wireframes: false, background: 'transparent' } });
+
+  const TAGS = ['Brand Strategy','Web Design','UI/UX','Motion Design','SEO','Next.js','Webflow','Content','Analytics','Figma','Framer','Copywriting','CRO','React'];
+  const colors = ['#0f2040','#12193a','#0a1e35'];
+  const strokes = ['#3b82f6','#2d3a5e','#1e3a6e'];
+
+  const bodies = TAGS.map((tag, i) => {
+    const w = tag.length * 8.5 + 44, h = 34;
+    const b = Bodies.rectangle(
+      60 + (i % 7) * (W / 7.2),
+      50 + Math.floor(i / 7) * 90 + Math.random() * 20,
+      w, h,
+      { restitution: 0.45, friction: 0.15, chamfer: { radius: 17 },
+        render: { fillStyle: colors[i % 3], strokeStyle: strokes[i % 3], lineWidth: 1 },
+        label: tag }
+    );
+    Body.setVelocity(b, { x: (Math.random() - .5) * 4, y: Math.random() * -4 });
+    return b;
+  });
+
+  let walls = makeWalls(W, H);
+  function makeWalls(w, h) {
+    return [
+      Bodies.rectangle(w/2, h+25, w, 50, { isStatic: true, render: { visible: false } }),
+      Bodies.rectangle(-25, h/2, 50, h, { isStatic: true, render: { visible: false } }),
+      Bodies.rectangle(w+25, h/2, 50, h, { isStatic: true, render: { visible: false } }),
+    ];
+  }
+
+  const mc = MouseConstraint.create(engine, { mouse: Mouse.create(canvas), constraint: { stiffness: 0.18, render: { visible: false } } });
+  World.add(engine.world, [...bodies, ...walls, mc]);
+
+  Events.on(render, 'afterRender', () => {
+    const ctx = render.context;
+    bodies.forEach(b => {
+      ctx.save();
+      ctx.translate(b.position.x, b.position.y);
+      ctx.rotate(b.angle);
+      ctx.font = "500 12px 'DM Sans', sans-serif";
+      ctx.fillStyle = '#8ab4d4';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText(b.label, 0, 0);
+      ctx.restore();
+    });
+  });
+
+  Render.run(render); Runner.run(Runner.create(), engine);
+
+  setInterval(() => {
+    bodies.forEach(b => Body.applyForce(b, b.position, { x: (Math.random()-.5)*.003, y: -.007 }));
+  }, 3500);
+
+  window.addEventListener('resize', () => {
+    const nW = canvas.parentElement.offsetWidth;
+    canvas.width = nW; render.options.width = nW; render.canvas.width = nW;
+    walls.forEach(w => World.remove(engine.world, w));
+    walls = makeWalls(nW, H);
+    World.add(engine.world, walls);
+  });
+})();
+
+// Form
+function sendForm(e) {
+  e.preventDefault();
+  const btn = e.target.querySelector('button');
+  btn.textContent = 'Sending...'; btn.disabled = true;
+  setTimeout(() => {
+    document.getElementById('cform').style.display = 'none';
+    document.getElementById('success').style.display = 'block';
+  }, 1200);
 }
 </script>
 </body>
